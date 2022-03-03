@@ -8,13 +8,15 @@ import ellipse from '../public/images/ellipse.svg';
 
 
 const Nav: NextPage = () => {
+  const today = new Date();
+  const time = today.getHours() + ":" + today.getMinutes();
   return (
     <nav className='bg-white grid grid-cols-12 mb-3 place-content-center'>
       <div className='col-span-1 self-center'>
         <Image src={caretLeft} alt="caret left" width='24px' height='24px' />
       </div>
       <div className='flex col-span-2 self-center'>
-        <p className='text-2xl xl:text-4xl'> 32:03 </p>
+        <p className='text-2xl xl:text-4xl'> {time} </p>
         <p className='ml-3 self-center'>
           <Image src={ellipse} alt="caret left" width={8} height={8} className='col-span-1' />
           {' '} Live
