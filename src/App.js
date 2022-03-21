@@ -12,7 +12,7 @@ const App = () => {
     <div>
       <NavBar />
       <Routes>
-        {/* <Route path="/" component={Home} /> */}
+        <Route path="/" element={<Home />} />
         <Route path="home" element={<Home />} />
         <Route path="watchStream" element={<WatchStream />} />
       </Routes>
