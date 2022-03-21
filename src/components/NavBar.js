@@ -23,8 +23,8 @@ const NavBar = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <div className="search h-10 px-5 text-[#b5b5b5] rounded-lg items-center">
-                    {!active ? <button className="bg-[#3f3f3f] text-white" onClick={() => activate(Injected)}>Connect</button> :
+                <div className="search text-[#b5b5b5] items-center">
+                    {!active ? <button className="h-10 px-5 bg-[#3f3f3f] text-white rounded-lg" onClick={() => activate(Injected)}>Connect</button> :
                         <div className="flex items-center justify-between">
                             <div>{account} </div>
                             <div className="w-auto h-[40px] bg-[#b5b5b5] overflow-clip rounded-full ml-2">
