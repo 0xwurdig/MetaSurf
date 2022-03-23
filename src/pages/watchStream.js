@@ -1,13 +1,14 @@
 import React from 'react'
-import { MaticBlack, MaticWhite } from '../components/maticSvg';
+import { Link } from 'react-router-dom';
+import { MaticBlack, MaticWhite } from '../components/svg';
 const WatchStream = () => {
     return (
         <div className="flex ">
-            <div className="bg-[#3f3f3f] h-auto w-auto py-10 px-20 text-lg text-white">
+            <div className="bg-[#3f3f3f] h-auto w-auto py-10 px-20 text-lg text-[#b5b5b5]">
                 <ul>
-                    <li className="my-4">Home</li>
-                    <li className="my-4">Dashboard</li>
-                    <li className="my-4">Stream</li>
+                    <li className="my-4"><Link to="/">Home</Link></li>
+                    <li className="my-4"><Link to="dashboard">Dashboard</Link></li>
+                    <li className="my-4"><Link to="createStream">Stream</Link></li>
                     <li className="my-4">Video NFT</li>
                 </ul>
             </div>
