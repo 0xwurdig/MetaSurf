@@ -20,7 +20,7 @@ export const DashboardTile = () => {
   }, []);
 
     return (
-        <div className="mt-10 drop-shadow-xl">
+        <div className="mt-10 drop-shadow-xl bg-white">
           <table className="table-auto w-full">
             <thead>
               <tr>
