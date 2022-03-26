@@ -209,7 +209,7 @@ const CreateStream = () => {
 
                         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} className="text-[#b5b5b5] min-w-[600px] w-[40vw] min-h-[150px] mx-16 outline-none " />
                         <div className="flex justify-end mx-16 min-w-[600px] w-[40vw]">
-                            <button className="bg-[#b5b5b5] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl ali" onClick={() => titleDescUpdate()}>
+                            <button className="bg-[#b5b5b5] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl ali hover:bg-[#3f3f3f] hover:text-white" onClick={() => titleDescUpdate()}>
                                 Save
                             </button>
                         </div>
