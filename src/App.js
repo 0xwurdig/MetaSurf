@@ -4,6 +4,7 @@ import React from 'react';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import CreateNFT from './pages/CreateNFT';
 import CreateStream from './pages/CreateStream';
 import CreateVideo from './pages/CreateVideo';
 import DashBoard from './pages/DashBoard';
@@ -21,6 +22,7 @@ const App = () => {
           <Route exact path="/dashboard" element={<DashBoard />} />
           <Route exact path="/createStream" element={<CreateStream />} />
           <Route exact path="/createVideo" element={<CreateVideo />} />
+          <Route exact path="/createNFT" element={<CreateNFT />} />
           <Route path="stream/:id" element={<WatchStream />} />
         </Routes>
     </Router>
