@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import { db } from '../firebase';
 import { InjectedConnector } from "@web3-react/injected-connector";
 const Injected = new InjectedConnector({
-    supportedChainIds: [137]
+    supportedChainIds: [80001]
 });
 const NavBar = () => {
     const { activate } = useWeb3React();
