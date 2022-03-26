@@ -24,10 +24,10 @@ export const DashboardTile = () => {
           <table className="table-auto w-full">
             <thead>
               <tr>
-                <th className="text-left">Thumbnail</th>
-                <th className="text-left">ID</th>
-                <th className="text-left">Views</th>
-                <th className="text-left">Revenue</th>
+                <th className="text-left text-xl font-medium">Thumbnail</th>
+                <th className="text-left text-xl font-medium">ID</th>
+                <th className="text-left text-xl font-medium">Views</th>
+                <th className="text-left text-xl font-medium">Revenue</th>
               </tr>
             </thead>
             <tbody>
