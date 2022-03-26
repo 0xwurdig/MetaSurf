@@ -12,18 +12,20 @@ import WatchStream from './pages/watchStream';
 
 const App = () => {
   return (
-    <Router>
+    <div>
       <NavBar />
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="home" element={<Home />} />
-        <Route exact path="/watchStream" element={<WatchStream />} />
-        <Route exact path="/dashboard" element={<DashBoard />} />
-        <Route exact path="/createStream" element={<CreateStream />} />
-        <Route exact path="/createVideo" element={<CreateVideo />} />
-        <Route path="stream/:id" element={<WatchStream />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="home" element={<Home />} />
+          <Route exact path="/watchStream" element={<WatchStream />} />
+          <Route exact path="/dashboard" element={<DashBoard />} />
+          <Route exact path="/createStream" element={<CreateStream />} />
+          <Route exact path="/createVideo" element={<CreateVideo />} />
+          <Route path="stream/:id" element={<WatchStream />} />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 
