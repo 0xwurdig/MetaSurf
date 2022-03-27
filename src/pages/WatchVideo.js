@@ -7,23 +7,7 @@ import { db } from '../firebase';
 import abi from '../abi/yourContract.json';
 import { Biconomy } from '@biconomy/mexa';
 const address = "0xd9145CCE52D386f254917e481eB44e9943F39138"
-let domainData = {
-    name: "Quote",
-    version: "1",
-    chainId: "80001", // Mumbai
-    verifyingContract: address,
-};
-const domainType = [
-    { name: "name", type: "string" },
-    { name: "version", type: "string" },
-    { name: "chainId", type: "uint256" },
-    { name: "verifyingContract", type: "address" },
-];
 
-const metaTransactionType = [
-    { name: "nonce", type: "uint256" },
-    { name: "from", type: "address" },
-];
 const WatchVideo = () => {
     const params = useParams()
     const navigate = useNavigate()
