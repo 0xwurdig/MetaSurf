@@ -4,6 +4,9 @@ import Chart from 'chart.js/auto';
 
 import { Doughnut } from 'react-chartjs-2';
 import { DashboardTile } from '../components/dashboard';
+import Cards from '../components/Cards';
+
+import { MaticBlack } from '../components/svg';
 
 
 const DashBoard = () => {
@@ -17,14 +20,22 @@ const DashBoard = () => {
                     <li className="my-4">Video NFT</li>
                 </ul>
             </div>
-            <div className="p-[5vw]">
+            <div className="p-[2vw]">
                 <div className="flex w-[65vw] max-w-[1500px] justify-between items-center">
-                    <div className="w-[500px]">
+                    <div className="w-[400px] bg-white rounded-2xl shadow-xl p-16">
                         <Doughnut data={data} options={options} />
                     </div>
-                    <div>
-                        <h1 className="text-3xl font-medium my-12 mx-16">Total Earned: 1000000</h1>
-                        <h1 className="text-3xl font-medium my-12 mx-16">Views: 300000</h1>
+                    <div className=''>
+                        <Cards
+                          cardTitle='Total Earned'
+                          cardImg={<MaticBlack />}
+                          cardValue='1000000'
+                        />
+                        <Cards
+                          cardTitle='Views'
+                          cardImg={<MaticBlack />}
+                          cardValue='300000'
+                        />
                     </div>
                 </div>
                 <div>

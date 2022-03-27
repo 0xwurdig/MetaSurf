@@ -69,17 +69,21 @@ const Home = () => {
                 </ul>
             </div>
             {
-                account ? <div className="p-[5vw]">
-                    <h1 className="text-4xl font-semibold mb-10 ">Live Streams...</h1>
-                    <div className="flex pb-10 w-[70vw] overflow-x-scroll">
-                        {activeStreams.length !== 0 ? carouselStream : <h1>Nothing to show</h1>}
-                    </div>
-                    <h1 className="text-4xl font-semibold my-10 ">Videos...</h1>
-                    <div className="flex flex-wrap pb-10 w-[70vw]">
-                        {videos.length !== 0 ? carouselVideo : <h1>Nothing to show</h1>}
-                    </div>
+                account
+                  ? <div className="p-[5vw]">
+                      <h1 className="text-4xl font-semibold mb-10 ">Live Streams...</h1>
+                      <div className="flex pb-10 w-[70vw] overflow-x-scroll">
+                          {activeStreams.length !== 0 ? carouselStream : <h1>Nothing to show</h1>}
+                      </div>
+                      <h1 className="text-4xl font-semibold my-10 ">Videos...</h1>
+                      <div className="flex flex-wrap pb-10 w-[70vw]">
+                          {videos.length !== 0 ? carouselVideo : <h1>Nothing to show</h1>}
+                      </div>
 
-                </div> : <div className="flex w-[80vw] h-[100vh]  justify-center items-center text-4xl font-semibold text-center"> Please Connect your wallet <br /> to view content </div>
+                    </div>
+                  : <div className="flex w-[80vw] h-[100vh]  justify-center items-center text-4xl font-semibold text-center">
+                      Please Connect your wallet <br /> to view content
+                  </div>
             }
 
         </div>
