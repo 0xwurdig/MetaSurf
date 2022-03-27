@@ -4,7 +4,6 @@ import './index.css';
 import { Web3ReactProvider } from '@web3-react/core'
 import { Web3Provider } from "@ethersproject/providers";
 import { BrowserRouter as Router } from 'react-router-dom';
-// import { Routes } from './routes'; // where we are going to specify our routes
 import App from './App';
 
 function getLibrary(provider) {
@@ -14,9 +13,7 @@ function getLibrary(provider) {
 ReactDOM.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
-      <Router>
         <App />
-      </Router>
     </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')

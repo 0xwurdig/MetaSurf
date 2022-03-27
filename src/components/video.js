@@ -28,8 +28,8 @@ export const VideoTiles = (props) => {
                         <p className="text-lg text-ellipsis overflow-hidden">{title}</p>
                         <p className="text-[#b5b5b5] text-xs text-ellipsis overflow-hidden">{wallet}</p>
                     </div>
-                    <div className="w-auto h-12 bg-[#b5b5b5] overflow-clip rounded-full">
-                        <img alt="" src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png" className="h-full object-contain" />
+                    <div className="w-auto h-12 bg-[#b5b5b5] overflow-clip rounded-full h-8 w-8">
+                        <img alt="" src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png" className="object-contain" />
                     </div>
                 </div>
             </div>

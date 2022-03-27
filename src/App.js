@@ -2,8 +2,9 @@ import React from 'react';
 // import { Home } from './views/Home';
 // import { About } from './views/About';
 
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import CreateNFT from './pages/CreateNFT';
 import CreateStream from './pages/CreateStream';
 import CreateVideo from './pages/CreateVideo';
 import DashBoard from './pages/DashBoard';
@@ -13,7 +14,7 @@ import WatchVideo from './pages/WatchVideo';
 
 const App = () => {
   return (
-    <div>
+    <Router>
       <NavBar />
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -25,7 +26,7 @@ const App = () => {
         <Route path="stream/:id" element={<WatchStream />} />
         <Route path="video/:id" element={<WatchVideo />} />
       </Routes>
-    </div>
+    </Router>
   );
 };
 

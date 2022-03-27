@@ -87,8 +87,8 @@ const CreateVideo = () => {
             <div className="bg-[#3f3f3f] h-auto min-h-[100vh] w-auto py-10 px-20 text-lg text-[#b5b5b5]">
                 <ul>
                     <li className="my-4"><Link to="/">Home</Link></li>
-                    <li className="my-4"><Link to="dashboard">Dashboard</Link></li>
-                    <li className="my-4"><Link to="createStream">Stream</Link></li>
+                    <li className="my-4"><Link to="/dashboard">Dashboard</Link></li>
+                    <li className="my-4"><Link to="/createStream">Stream</Link></li>
                     <li className="my-4">Video NFT</li>
                 </ul>
             </div>
@@ -114,7 +114,7 @@ const CreateVideo = () => {
 
                         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} className="text-[#b5b5b5] min-w-[600px] w-[40vw] min-h-[150px] mx-16 outline-none " />
                         {/* <div className="flex justify-end mx-16 min-w-[600px] w-[40vw]">
-                            <button className="bg-[#b5b5b5] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl ali" onClick={() => titleDescUpdate()}>
+                            <button className="bg-[#b5b5b5] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl ali hover:bg-[#3f3f3f] hover:text-white" onClick={() => titleDescUpdate()}>
                                 Save
                             </button>
                         </div> */}
