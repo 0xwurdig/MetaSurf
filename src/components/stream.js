@@ -20,6 +20,7 @@ export const StreamTiles = (props) => {
             //     title: doc.data().title,
             //     streamer: doc.id
             // })
+            console.log(doc.data())
             setWallet(doc.id)
             setDetails(doc.data().title)
             setThumbnail(doc.data().thumbNail)

@@ -13,8 +13,10 @@ import yourContract from "../abi/yourContract.json"
 import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
 const CreateStream = () => {
-    const { account } = useWeb3React();
+    const { account, library } = useWeb3React();
     // const [hlsUrl, setHlsUrl] = useState("");
+    const [thumbUploaded, setThumbUploaded] = useState(false);
+    const [thumbLoaded, setThumbLoaded] = useState(false);
     const [playbackId, setPlaybackId] = useState("");
     const [isActive, setIsActive] = useState(false);
     const [streamId, setStreamId] = useState("");
@@ -62,10 +64,24 @@ const CreateStream = () => {
     }, [isActive]);
     useEffect(() => {
         contractInit();
-    })
+    }, [])
+    useEffect(() => {
+        titleDescUpdate()
+    }, [title, desc, thumbNail])
     const contractInit = async () => {
-        const contract = new ethers.Contract("0x0e5196f3c26Ac63f4383c3117455655EEc92aCf9", yourContract)
-        console.log(contract)
+        // const signer = contract.connect(library.getSigner());
+        const contract = new ethers.Contract("0x48E258c7be52d92fb4769a40096daB2016365603", yourContract, library)
+        const random = await contract.randomResult();
+        const signer = contract.connect(library.getSigner());
+        await signer.getRandomNumber();
+        console.log("waiting for generation")
+        contract.on("NewRandomNumber", (user, number) => {
+            console.log(`${user} generated ${number}`)
+        })
+        // console.log("Response : " + random);
+        // console.log(contract)
+        // const random
+
 
     }
     const checkUser = async () => {
@@ -151,6 +167,7 @@ const CreateStream = () => {
         uploadTask.on(
             "state_changed",
             (snapshot) => {
+                setThumbLoaded(true)
                 const prog = Math.round(
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
@@ -159,24 +176,29 @@ const CreateStream = () => {
             (error) => console.log(error),
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log(downloadURL);
-                    setThumbNail(downloadURL)
+                    const a = downloadURL
+                    setThumbNail(a)
+                    setThumbLoaded(true)
                 });
             }
         );
+        // await updateDoc(doc(db, "users", account), {
+        //     "thumbNail": thumbNail
+        // });
     }
     const thumbnailHandler = async (e) => {
         console.log("Bwahahahahahahaha")
         const file = e.target.files[0];
         uploadThumbnail(file);
-        await updateDoc(doc(db, "users", account), {
-            "thumbNail": thumbNail
-        });
+        // await updateDoc(doc(db, "users", account), {
+        //     "thumbNail": thumbNail
+        // });
     };
     const titleDescUpdate = async () => {
         await updateDoc(doc(db, "users", account), {
             "title": title,
             "desc": desc,
+            "thumbNail": thumbNail,
         });
     }
     return (
@@ -190,7 +212,7 @@ const CreateStream = () => {
                 </ul>
             </div>
             <div className="p-[5vw]">
-                <div className="w-[70vw]  min-w-[1100px] max-h-[1000px] overflow-clip"><div data-vjs-player>
+                <div className="w-[70vw] bg-black min-w-[1100px] aspect-video overflow-clip"><div data-vjs-player>
                     {
                         thumbNail !== "" && !isActive ? <img src={thumbNail} alt="ThumbNail" className='w-full' /> :
                             <video
@@ -215,13 +237,13 @@ const CreateStream = () => {
                         </div>
                     </div>
                     <div>
-                        <div className="flex justify-between h-auto w-[70%] bg-[#3f3f3f] px-5 py-3 items-center my-10 rounded-xl text-white">
+                        <div className="flex justify-between h-auto w-[70%] bg-[#3f3f3f] px-5 py-3 items-center mt-10 rounded-xl text-white">
                             {/* <MaticWhite /> */}
                             <label className='mr-10'>ThumbNail</label>
-
                             <input type="file" className="input" onChange={thumbnailHandler} />
                         </div>
-                        <div className="flex justify-between h-auto w-[70%] bg-[#3f3f3f] px-5 py-3 items-center my-10 rounded-xl text-white">
+                        <span>{thumbUploaded ? "Uploaded" : thumbLoaded ? "Loading..." : ""}</span>
+                        <div className="flex justify-between h-auto w-[70%] bg-[#3f3f3f] px-5 py-3 items-center mt-20 rounded-xl text-white">
                             {/* <MaticWhite /> */}
                             <label className='mr-10'>StreamKey</label>
                             <div className="text-2xl font-light text-white tracking-wider">{streamKey}</div>

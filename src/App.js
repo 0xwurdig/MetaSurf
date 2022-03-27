@@ -9,6 +9,7 @@ import CreateVideo from './pages/CreateVideo';
 import DashBoard from './pages/DashBoard';
 import Home from './pages/Home';
 import WatchStream from './pages/WatchStream';
+import WatchVideo from './pages/WatchVideo';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route exact path="createStream" element={<CreateStream />} />
         <Route exact path="createVideo" element={<CreateVideo />} />
         <Route path="stream/:id" element={<WatchStream />} />
+        <Route path="video/:id" element={<WatchVideo />} />
       </Routes>
     </div>
   );

@@ -19,10 +19,10 @@ export const VideoTiles = (props) => {
         });
     }
     return (
-        <Link to={`/stream/${props.id}`}>
+        <Link to={`/video/${props.id}`}>
 
             <div className="mr-10 w-[22vw]">
-                <img alt="" src={thumbnail} />
+                <img alt="" src={thumbnail} className="w-full aspect-video" />
                 <div className="flex justify-between items-center mt-2">
                     <div className="w-[70%] h-auto">
                         <p className="text-lg text-ellipsis overflow-hidden">{title}</p>
