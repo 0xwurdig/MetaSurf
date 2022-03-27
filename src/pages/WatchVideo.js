@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import Web3 from "web3";
+import { useWeb3React } from '@web3-react/core';
+import { ethers } from "ethers";
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { MaticBlack, MaticWhite } from '../components/svg';
 import { db } from '../firebase';
 import abi from '../abi/yourContract.json';
 import { Biconomy } from '@biconomy/mexa';
-const address = "0xd9145CCE52D386f254917e481eB44e9943F39138"
+const address = "0xDA0bab807633f07f013f94DD0E6A4F96F8742B53"
 
 const WatchVideo = () => {
     const params = useParams()
+    const { account, library } = useWeb3React();
     const navigate = useNavigate()
     const id = params.id
     const [videoUrl, setVideoUrl] = useState("")
@@ -27,6 +30,8 @@ const WatchVideo = () => {
         abi,
         address
     );
+    const readContract = new ethers.Contract(address, abi, library)
+
     useEffect(() => {
         onSnapshot(doc(db, "videos", id), (doc) => {
             setVideoUrl(doc.data().video)
@@ -54,107 +59,24 @@ const WatchVideo = () => {
                 console.log(error);
             });
     }, []);
-    async function startApp() {
-        const result = await contract.methods
-            .randomResult()
-            .call({ from: window.ethereum.selectedAddress });
-        console.log(`RESULT`);
-        console.log(result);
-    }
     //   const onQuoteChange = (event) => {
     //     setNewQuote(event.target.value);
     //   };
 
     async function onButtonClickMeta() {
-        // let tx = contract.methods.getRandomNumber().send({
-        //     from: window.ethereum.selectedAddress,
-        //     signatureType: biconomy.EIP712_SIGN,
-        //     //optionally you can add other options like gasLimit
-        // });
-        // tx.on("transactionHash", function (hash) {
-        //     console.log(`Transaction hash is ${hash}`);
-        //     console.log(`Transaction sent. Waiting for confirmation ..`);
-        // }).once("confirmation", function (confirmationNumber, receipt) {
-        //     console.log(receipt);
-        //     console.log(receipt.transactionHash);
-        //     //do something with transaction hash
-        // });
-        await contract.methods
-            .randomResult
-            .call().then(console.log);
-        // console.log(`RESULT`);
-        // console.log(result.);
-        // TODO: use ethersjs library to get nonce
-        // let nonce = await web3.eth.getTransactionCount(
-        //     window.ethereum.selectedAddress
-        // );
-        // console.log(`NONCE: ${nonce}`);
-        // let message = {};
-        // message.nonce = parseInt(nonce);
-        // message.from = window.ethereum.selectedAddress;
-        // const dataToSign = JSON.stringify({
-        //     types: {
-        //         EIP712Domain: domainType,
-        //         MetaTransaction: metaTransactionType,
-        //     },
-        //     domain: domainData,
-        //     primaryType: "MetaTransaction",
-        //     message: message,
-        // });
-
-        // window.web3.currentProvider.sendAsync(
-        //     {
-        //         jsonrpc: "2.0",
-        //         id: 999999999999,
-        //         method: "eth_signTypedData_v4",
-        //         params: [window.ethereum.selectedAddress, dataToSign],
-        //     },
-        //     async function (err, result) {
-        //         if (err) {
-        //             return console.error(err);
-        //         }
-        //         console.log("Signature result from wallet :");
-        //         console.log(result);
-        //         if (result && result.result) {
-        //             const signature = result.result.substring(2);
-        //             const r = "0x" + signature.substring(0, 64);
-        //             const s = "0x" + signature.substring(64, 128);
-        //             const v = parseInt(signature.substring(128, 130), 16);
-        //             console.log(r, "r");
-        //             console.log(s, "s");
-        //             console.log(v, "v");
-        //             console.log(window.ethereum.address, "userAddress");
-
-        //             const promiEvent = contract.methods.getRandomNumber.send({
-        //                 from: window.ethereum.selectedAddress,
-        //             });
-        //             promiEvent
-        //                 .on("transactionHash", (hash) => {
-        //                     console.log(
-        //                         "Transaction sent successfully. Check Console for Transaction hash"
-        //                     );
-        //                     console.log("Transaction Hash is ", hash);
-        //                 })
-        //                 .once("confirmation", (confirmationNumber, receipt) => {
-        //                     if (receipt.status) {
-        //                         console.log("Transaction processed successfully");
-        //                         startApp();
-        //                     } else {
-        //                         console.log("Transaction Failed");
-        //                     }
-        //                     console.log(receipt);
-        //                 });
-        //             contract.once("NewRandomNumber", (error, event) => {
-        //                 if (!error) console.log(event);
-        //                 else console.log(`Error: ${error}`);
-        //             })
-        //         } else {
-        //             console.log(
-        //                 "Could not get user signature. Check console logs for error"
-        //             );
-        //         }
-        //     }
-        // );
+        let tx = contract.methods.getRandomNumber().send({
+            from: window.ethereum.selectedAddress,
+            signatureType: biconomy.EIP712_SIGN,
+            //optionally you can add other options like gasLimit
+        });
+        tx.on("transactionHash", function (hash) {
+            console.log(`Transaction hash is ${hash}`);
+            console.log(`Transaction sent. Waiting for confirmation ..`);
+        }).once("confirmation", function (confirmationNumber, receipt) {
+            console.log(receipt);
+            console.log(receipt.transactionHash);
+            //do something with transaction hash
+        });
     }
 
     return (
@@ -199,7 +121,7 @@ const WatchVideo = () => {
                     <div className="flex justify-between h-auto w-auto bg-[#D3D3D3] px-4 py-3 items-center rounded-xl">
                         <MaticBlack />
                         <div className='w-[30%]'>
-                            <input type="text" pattern="[0-9]*" className="text-lg text-[#848484] bg-transparent w-full outline-none border-b-black border-b-2" />
+                            <input type="text" pattern="[0-9]*" className="text-lg text-[#848484] bg-transparent w-full outline-none border-b-black border-b-2" onChnage />
                         </div>
                         <button className="bg-[#3f3f3f] h-[74px] w-[40%] -my-3 -mr-4 rounded-2xl text-white text-xl tracking-widest" onClick={() => onButtonClickMeta()} >
                             TIP
