@@ -10,6 +10,7 @@ import { db } from '../firebase';
 // import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
+import { createNewFlow, deleteFlow } from '../superfluid';
 const WatchStream = () => {
     const navigate = useNavigate();
     const { account } = useWeb3React();
@@ -20,6 +21,7 @@ const WatchStream = () => {
     const [playbackId, setPlaybackId] = useState(null);
     const [title, setTitle] = useState("Title...")
     const [desc, setDesc] = useState("Description...")
+    const [streamOn, setStreamOn] = useState(false)
     const onVideo = useCallback((el) => {
         setVideoEl(el);
     }, []);
@@ -62,6 +64,13 @@ const WatchStream = () => {
         });
 
     }, [playbackId]);
+    useEffect(() => {
+        const a = createNewFlow("0x8BC09eEE30b7f6E620C7f3a89bc131B381cA0523", account, 100000000000000)
+        if (a) {
+            setStreamOn(true)
+        }
+        return () => deleteFlow(account, "0x8BC09eEE30b7f6E620C7f3a89bc131B381cA0523");
+    }, [])
 
     const leaveStream = async () => {
         const docRef = doc(db, "users", id);
@@ -84,7 +93,7 @@ const WatchStream = () => {
                 <div className="w-[70vw]  min-w-[1100px] max-h-[1000px] overflow-clip">
                     <video
                         id="video"
-                        ref={onVideo}
+                        ref={streamOn ? onVideo : {}}
                         className="h-full w-full video-js vjs-theme-city"
                         controls
                         playsInline
@@ -106,13 +115,13 @@ const WatchStream = () => {
                 </div>
                 <div className="grid grid-cols-7 gap-4 bg-[#3f3f3f] text-white rounded-2xl p-4">
                     {/* TODO loop through and pass viewers details dynamically */}
-                  <div className='w-14 h-14 bg-white rounded-full'>
-                    <img
-                      alt=""
-                      src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png"
-                      className="object-contain w-14 h-14"
-                    />
-                  </div>
+                    <div className='w-14 h-14 bg-white rounded-full'>
+                        <img
+                            alt=""
+                            src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png"
+                            className="object-contain w-14 h-14"
+                        />
+                    </div>
                 </div>
                 <div className="flex justify-between items-center">
                     <button className="bg-[#B11414] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl" onClick={() => leaveStream()}>

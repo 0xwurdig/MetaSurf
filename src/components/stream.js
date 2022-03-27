@@ -29,7 +29,7 @@ export const StreamTiles = (props) => {
     return (
         <Link to={`/stream/${wallet}`}>
             <div className="mr-10">
-                <div className="w-[40vw]"><img alt="" src={thumbnail} /></div>
+                <div className="w-[40vw] aspect-video overflow-clip"><img alt="" src={thumbnail} /></div>
                 <div className="flex justify-between items-center">
                     <div>
                         <h1 className="text-xl my-5">{title}</h1>

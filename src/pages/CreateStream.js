@@ -63,27 +63,24 @@ const CreateStream = () => {
         }
     }, [isActive]);
     useEffect(() => {
-        contractInit();
-    }, [])
-    useEffect(() => {
         titleDescUpdate()
     }, [title, desc, thumbNail])
-    const contractInit = async () => {
-        // const signer = contract.connect(library.getSigner());
-        const contract = new ethers.Contract("0x48E258c7be52d92fb4769a40096daB2016365603", yourContract, library)
-        const random = await contract.randomResult();
-        const signer = contract.connect(library.getSigner());
-        await signer.getRandomNumber();
-        console.log("waiting for generation")
-        contract.on("NewRandomNumber", (user, number) => {
-            console.log(`${user} generated ${number}`)
-        })
-        // console.log("Response : " + random);
-        // console.log(contract)
-        // const random
+    // const contractInit = async () => {
+    //     // const signer = contract.connect(library.getSigner());
+    //     const contract = new ethers.Contract("0x48E258c7be52d92fb4769a40096daB2016365603", yourContract, library)
+    //     const random = await contract.randomResult();
+    //     const signer = contract.connect(library.getSigner());
+    //     await signer.getRandomNumber();
+    //     console.log("waiting for generation")
+    //     contract.on("NewRandomNumber", (user, number) => {
+    //         console.log(`${user} generated ${number}`)
+    //     })
+    //     // console.log("Response : " + random);
+    //     // console.log(contract)
+    //     // const random
 
 
-    }
+    // }
     const checkUser = async () => {
         const docRef = doc(db, "users", account);
         const docSnap = await getDoc(docRef);
@@ -178,7 +175,7 @@ const CreateStream = () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     const a = downloadURL
                     setThumbNail(a)
-                    setThumbLoaded(true)
+                    setThumbUploaded(true)
                 });
             }
         );
