@@ -19,6 +19,7 @@ const ChatBox = () => {
     if(message) {
       msg.push({msg: message, profile: profile})
       setData(msg);
+      setMessage('');
     }
   }
 
