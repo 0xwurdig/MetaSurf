@@ -5,12 +5,15 @@ import { MaticBlack, MaticWhite } from '../components/svg';
 import videojs from "video.js";
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { db } from '../firebase';
-
-// import "videojs-contrib-hls";
-// import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
-import { createNewFlow, deleteFlow } from '../superfluid';
+import Web3 from "web3";
+import { Framework } from "@superfluid-finance/sdk-core";
+import { Biconomy } from '@biconomy/mexa';
+import { ethers } from "ethers";
+// import {
+//     BatchOperation
+// } from "@superfluid-finance/ethereum-contracts/interfaces/superfluid/ISuperfluid.sol";
 const WatchStream = () => {
     const navigate = useNavigate();
     const { account } = useWeb3React();
@@ -22,12 +25,16 @@ const WatchStream = () => {
     const [title, setTitle] = useState("Title...")
     const [desc, setDesc] = useState("Description...")
     const [streamOn, setStreamOn] = useState(false)
+    const MATICx = "0x96B82B65ACF7072eFEb00502F45757F254c2a0D4";
+    const flowRate = 1000000000000;
+    // const ether = new ethers.providers.Web3Provider(biconomy)
     const onVideo = useCallback((el) => {
         setVideoEl(el);
     }, []);
     useEffect(() => {
         getData()
     }, [])
+
     const getData = async () => {
         const docRef = doc(db, "users", id);
         const docSnap = await getDoc(docRef);
@@ -65,19 +72,153 @@ const WatchStream = () => {
 
     }, [playbackId]);
     useEffect(() => {
-        const a = createNewFlow("0x8BC09eEE30b7f6E620C7f3a89bc131B381cA0523", account, 100000000000000)
-        if (a) {
-            setStreamOn(true)
+        if (!window.ethereum) {
+            console.log("Metamask is required to use this DApp");
+            return;
         }
-        return () => deleteFlow(account, "0x8BC09eEE30b7f6E620C7f3a89bc131B381cA0523");
-    }, [])
+        startFlow("0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa", 333333333333333)
+        return () => { deleteFLow("0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa") }
+    }, []);
+    async function startFlow(recipient, flowRate) {
+        const chainId = await window.ethereum.request({ method: "eth_chainId" });
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const sf = await Framework.create({
+            chainId: Number(chainId),
+            provider: provider
+        });
+        const MATICXX = await sf.loadSuperToken(
+            MATICx
+        );
+        try {
+            sf.batchCall([
+                MATICXX.createFlow({
+                    sender: account,
+                    receiver: "0x3A920fBe9A3C4Bd3a95ad9BA146dFbcE8fF0154C",
+                    flowRate: flowRate,
+                    superToken: MATICx
+                    // userData?: string
+                }), MATICXX.createFlow({
+                    sender: account,
+                    receiver: "0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa",
+                    flowRate: flowRate,
+                    superToken: MATICx
+                    // userData?: string
+                })]
+            ).exec(provider.getSigner()).then(function (tx) {
+                console.log(
+                    `Congrats - you've just successfully executed a batch call!
+                  You have completed 2 operations in a single tx 🤯
+                  View the tx here:  https://kovan.etherscan.io/tx/${tx.hash}
+                  View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+                  Network: Kovan
+                  Super Token: DAIx
+                  Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+                  Receiver: ${recipient},
+                  FlowRate: ${Web3.eth.getBalance(MATICx)}
+                }
+                  `
+                );
+            });
+            // const createFlowOperation = sf.cfaV1.createFlow({
+            //     receiver: recipient,
+            //     flowRate: flowRate,
+            //     superToken: MATICx
+            //     // userData?: string
+            // });
+
+            // console.log("Creating your stream...");
+
+            // const result = await createFlowOperation.exec(provider.getSigner());
+            // console.log(result);
+            // console.log(
+            //     `Congrats - you've just created a money stream!
+            // View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+            // Network: Kovan
+            // Super Token: DAIx
+            // Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+            // Receiver: ${recipient},
+            // FlowRate: ${flowRate}
+            // `
+            // );
+        } catch (error) {
+            console.log(
+                "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
+            );
+            console.error(error);
+        }
+    }
+    async function deleteFLow(recipient) {
+        const chainId = await window.ethereum.request({ method: "eth_chainId" });
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const sf = await Framework.create({
+            chainId: Number(chainId),
+            provider: provider
+        });
+        const MATICXX = await sf.loadSuperToken(
+            MATICx
+        );
+        try {
+            sf.batchCall([
+                MATICXX.deleteFlow({
+                    sender: account,
+                    receiver: "0x3A920fBe9A3C4Bd3a95ad9BA146dFbcE8fF0154C",
+                    superToken: MATICx
+                    // userData?: string
+                }), MATICXX.deleteFlow({
+                    sender: account,
+                    receiver: "0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa",
+                    superToken: MATICx
+                    // userData?: string
+                })]
+            ).exec(provider.getSigner()).then(function (tx) {
+                console.log(
+                    `Congrats - you've just successfully executed a batch call!
+                  You have completed 2 operations in a single tx 🤯
+                  View the tx here:  https://kovan.etherscan.io/tx/${tx.hash}
+                  View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+                  Network: Kovan
+                  Super Token: DAIx
+                  Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+                  Receiver: ${recipient},
+                  FlowRate: ${flowRate}
+                  `
+                );
+            });
+            // const createFlowOperation = sf.cfaV1.createFlow({
+            //     receiver: recipient,
+            //     flowRate: flowRate,
+            //     superToken: MATICx
+            //     // userData?: string
+            // });
+
+            // console.log("Creating your stream...");
+
+            // const result = await createFlowOperation.exec(provider.getSigner());
+            // console.log(result);
+            // console.log(
+            //     `Congrats - you've just created a money stream!
+            // View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+            // Network: Kovan
+            // Super Token: DAIx
+            // Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+            // Receiver: ${recipient},
+            // FlowRate: ${flowRate}
+            // `
+            // );
+        } catch (error) {
+            console.log(
+                "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
+            );
+            console.error(error);
+        }
+    }
 
     const leaveStream = async () => {
-        const docRef = doc(db, "users", id);
-        await updateDoc(docRef, {
-            viewers: arrayRemove(account)
-        }).then(() => navigate('/'));
-
+        // const docRef = doc(db, "users", id);
+        // await updateDoc(docRef, {
+        //     viewers: arrayRemove(account)
+        // }).then(() => navigate('/'));
+        deleteFLow(account)
     }
     return (
         <div className="flex ">

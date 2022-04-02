@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { db, storage } from '../firebase';
 import { useWeb3React } from '@web3-react/core';
-import { ethers } from 'ethers';
+// import { ethers } from 'ethers';
 import { Link } from 'react-router-dom';
 import { MaticBlack } from '../components/svg';
 import videojs from "video.js";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import yourContract from "../abi/yourContract.json"
+// import yourContract from "../abi/yourContract.json"
 // import "videojs-contrib-hls";
 // import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
 const CreateStream = () => {
-    const { account, library } = useWeb3React();
+    const { account } = useWeb3React();
     // const [hlsUrl, setHlsUrl] = useState("");
     const [thumbUploaded, setThumbUploaded] = useState(false);
     const [thumbLoaded, setThumbLoaded] = useState(false);

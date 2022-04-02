@@ -23,6 +23,7 @@ const App = () => {
         <Route exact path="dashboard" element={<DashBoard />} />
         <Route exact path="createStream" element={<CreateStream />} />
         <Route exact path="createVideo" element={<CreateVideo />} />
+        <Route exact path="createNft" element={<CreateNFT />} />
         <Route path="stream/:id" element={<WatchStream />} />
         <Route path="video/:id" element={<WatchVideo />} />
       </Routes>

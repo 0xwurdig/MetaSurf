@@ -2,12 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { db, storage } from '../firebase';
 import { useWeb3React } from '@web3-react/core'
 import { Link, useNavigate } from 'react-router-dom';
-import { doc, addDoc, getDoc, updateDoc, collection } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { create as ipfsHttpClient } from 'ipfs-http-client'
+import abi from '../abi/yourContract.json'
+import { Biconomy } from '@biconomy/mexa';
+import Web3 from "web3";
 const ipfs = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
-// import "videojs-contrib-hls";
-// import "videojs-contrib-quality-levels";
+const NFT_Port_API = "05c9c773-8027-45ad-99b1-5888d2e83412"
+
 const CreateVideo = () => {
     const { account } = useWeb3React();
     const navigate = useNavigate();
@@ -18,6 +21,35 @@ const CreateVideo = () => {
     const [desc, setDesc] = useState("Description...")
     const [loading, setLoading] = useState(false)
     const [uploaded, setUploaded] = useState(false)
+    const biconomy = new Biconomy(window.ethereum, {
+        apiKey: "P6g4LGJOy.30ed56bf-2bcb-4eb3-b616-a88f787aa2e8",
+        debug: true,
+    });
+    const address = "0xfB59d267570D4Ea182662534d7F7ED431F870a68"
+
+    const web3 = new Web3(biconomy);
+    const contract = new web3.eth.Contract(
+        abi,
+        address
+    );
+    useEffect(() => {
+        if (!window.ethereum) {
+            console.log("Metamask is required to use this DApp");
+            return;
+        }
+        biconomy
+            .onEvent(biconomy.READY, async () => {
+                // Initialize your dapp here like getting user accounts etc
+                await window.ethereum.enable();
+                // console.log(`MUMBAI SMART CONTRACT`);
+                // console.log(contract);
+                // startApp();
+            })
+            .onEvent(biconomy.ERROR, (error, message) => {
+                // Handle error while initializing mexa
+                console.log(error);
+            });
+    }, []);
     const uploadThumbnail = (file) => {
         if (!file) return;
         const storageRef = ref(storage, `/files/${account}/${file.name}`);
@@ -71,16 +103,39 @@ const CreateVideo = () => {
     };
 
     const mint = async () => {
-        await addDoc(collection(db, "videos"), {
-            "title": title,
-            "desc": desc,
-            "owner": account,
-            "thumbNail": thumbNail,
-            "video": videoUrl,
-            "tips": 0
-        }).then(() =>
-            navigate("/home")
-        )
+        const res = await fetch("https://api.nftport.xyz/v0/metadata", {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": NFT_Port_API
+            },
+            "body": "{\"name\":\"My Art\",\"description\":\"This is my custom art piece\",\"file_url\":\"https://ipfs.io/ipfs/QmRModSr9gQTSZrbfbLis6mw21HycZyqMA3j8YMRD11nAQ\"}"
+        })
+            .then(response => response.json())
+            .catch(err => {
+                console.error(err);
+            });
+        const metadataUri = res.metadata_uri
+        let tx = await contract.methods.createVideoNFT(metadataUri).send({
+            from: window.ethereum.selectedAddress,
+            signatureType: biconomy.EIP712_SIGN,
+            //optionally you can add other options like gasLimit
+        }).then(tokenId => { console.log(tokenId) });
+        tx.on("transactionHash", function (hash) {
+            console.log(`Transaction hash is ${hash}`);
+            console.log(`Transaction sent. Waiting for confirmation ..`);
+        }).once("confirmation", function (confirmationNumber, receipt) {
+            console.log(receipt);
+            console.log(receipt.transactionHash);
+            //do something with transaction hash
+        });
+        // await addDoc(collection(db, "videos"), {
+        //     // "tokenId":
+        //     "metadataUri":metadataUri,
+        //     "views":[],
+        // }).then(() =>
+        //     navigate("/home")
+        // )
     }
     return (
         <div className="flex ">
