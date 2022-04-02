@@ -1,8 +1,8 @@
 import React from 'react'
 
-const TextField = ({label, value, id, fieldType, onChange}) => {
+const TextField = ({label, value, id, fieldType, onChange, width}) => {
   return (
-    <div className="mb-4">
+    <div className={`mb-4 ${width}`}>
       <label className="block text-gray-700 text-sm font-bold mb-2" for={id}>
         {label}
       </label>

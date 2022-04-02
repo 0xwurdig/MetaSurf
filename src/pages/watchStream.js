@@ -256,20 +256,8 @@ const WatchStream = () => {
 
                     </div>
                 </div>
-                <div className='flex justify-between bg-[#3f3f3f] text-white rounded-2xl p-4 max-h-[400px] overflow-scroll'>
-                  <div className=" w-[70%] grid grid-cols-7 gap-4">
-                      {/* TODO loop through and pass viewers details dynamically */}
-                      <div className='w-14 h-14 bg-white rounded-full'>
-                          <img
-                              alt=""
-                              src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png"
-                              className="object-contain w-14 h-14"
-                          />
-                      </div>
-                  </div>
-                  <div className='w-[30%]'>
+                <div className='flex justify-between bg-[#3f3f3f] text-white rounded-2xl p-4 max-h-[400px] overflow-y-auto w-1/2'>
                     <ChatBox />
-                  </div>
                 </div>
                 <div className="flex justify-between items-center">
                     <button className="bg-[#B11414] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl" onClick={() => leaveStream()}>
