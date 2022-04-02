@@ -8,7 +8,6 @@ import { MaticBlack, MaticWhite } from '../components/svg';
 import { db } from '../firebase';
 import abi from '../abi/yourContract.json';
 import { Biconomy } from '@biconomy/mexa';
-const address = "0xDA0bab807633f07f013f94DD0E6A4F96F8742B53"
 
 const WatchVideo = () => {
     const params = useParams()
@@ -20,27 +19,18 @@ const WatchVideo = () => {
     const [desc, setDesc] = useState("")
     const [owner, setOwner] = useState("")
     const [tips, setTips] = useState(0)
+    const [tip, setTip] = useState(0)
     const biconomy = new Biconomy(window.ethereum, {
         apiKey: "P6g4LGJOy.30ed56bf-2bcb-4eb3-b616-a88f787aa2e8",
         debug: true,
     });
+    const address = "0xfB59d267570D4Ea182662534d7F7ED431F870a68"
 
     const web3 = new Web3(biconomy);
     const contract = new web3.eth.Contract(
         abi,
         address
     );
-    const readContract = new ethers.Contract(address, abi, library)
-
-    useEffect(() => {
-        onSnapshot(doc(db, "videos", id), (doc) => {
-            setVideoUrl(doc.data().video)
-            setTitle(doc.data().title)
-            setDesc(doc.data().desc)
-            setOwner(doc.data().owner)
-            setTips(doc.data().tips)
-        });
-    })
     useEffect(() => {
         if (!window.ethereum) {
             console.log("Metamask is required to use this DApp");
@@ -59,23 +49,37 @@ const WatchVideo = () => {
                 console.log(error);
             });
     }, []);
+    useEffect(() => {
+        onSnapshot(doc(db, "videos", id), (doc) => {
+            setVideoUrl(doc.data().video)
+            setTitle(doc.data().title)
+            setDesc(doc.data().desc)
+            setOwner(doc.data().owner)
+            setTips(doc.data().tips)
+        });
+    })
     //   const onQuoteChange = (event) => {
     //     setNewQuote(event.target.value);
     //   };
 
     async function onButtonClickMeta() {
-        let tx = contract.methods.getRandomNumber().send({
-            from: window.ethereum.selectedAddress,
-            signatureType: biconomy.EIP712_SIGN,
-            //optionally you can add other options like gasLimit
-        });
-        tx.on("transactionHash", function (hash) {
-            console.log(`Transaction hash is ${hash}`);
-            console.log(`Transaction sent. Waiting for confirmation ..`);
-        }).once("confirmation", function (confirmationNumber, receipt) {
-            console.log(receipt);
-            console.log(receipt.transactionHash);
-            //do something with transaction hash
+        // let tx = contract.methods.getRandomNumber().send({
+        //     from: window.ethereum.selectedAddress,
+        //     signatureType: biconomy.EIP712_SIGN,
+        //     //optionally you can add other options like gasLimit
+        // });
+        // tx.on("transactionHash", function (hash) {
+        //     console.log(`Transaction hash is ${hash}`);
+        //     console.log(`Transaction sent. Waiting for confirmation ..`);
+        // }).once("confirmation", function (confirmationNumber, receipt) {
+        //     console.log(receipt);
+        //     console.log(receipt.transactionHash);
+        //     //do something with transaction hash
+        // });
+        web3.eth.sendTransaction({
+            from: web3.currentProvider.selectedAddress,
+            to: owner,
+            value: web3.utils.toWei(tip, "ether"),
         });
     }
 
@@ -121,7 +125,7 @@ const WatchVideo = () => {
                     <div className="flex justify-between h-auto w-auto bg-[#D3D3D3] px-4 py-3 items-center rounded-xl">
                         <MaticBlack />
                         <div className='w-[30%]'>
-                            <input type="text" pattern="[0-9]*" className="text-lg text-[#848484] bg-transparent w-full outline-none border-b-black border-b-2" onChnage />
+                            <input type="number" pattern="[0-9]*" className="text-lg text-[#848484] bg-transparent w-full outline-none border-b-black border-b-2" onChange={(value) => setTip(value)} />
                         </div>
                         <button className="bg-[#3f3f3f] h-[74px] w-[40%] -my-3 -mr-4 rounded-2xl text-white text-xl tracking-widest" onClick={() => onButtonClickMeta()} >
                             TIP
