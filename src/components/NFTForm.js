@@ -128,7 +128,7 @@ const NFTForm = () => {
       }).then(async () =>
         await updateDoc(doc(db, "merch", "merch"), {
           merch: arrayUnion(account)
-        }).then(async () => console.log("DONEEEEE"))
+        }).then(async () => navigate("/merchDashboard"))
         // navigate("/home")
 
       )

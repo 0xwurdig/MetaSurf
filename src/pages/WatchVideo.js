@@ -136,7 +136,6 @@ const WatchVideo = () => {
                         className="h-full w-full video-js vjs-theme-city"
                         autoPlay
                         playsInline
-                        controls
                         poster={adVideo ? adVideo.thumbnail : ""}
                         onEnded={() => rewardNft()}
                     /> : <video

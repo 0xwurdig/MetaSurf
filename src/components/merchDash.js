@@ -30,13 +30,13 @@ export const MerchDashboardTile = () => {
                         <th className="text-left text-xl font-medium">Thumbnail</th>
                         <th className="text-left text-xl font-medium">Title</th>
                         <th className="text-left text-xl font-medium">ID</th>
-                        <th className="text-left text-xl font-medium">Views</th>
+                        {/* <th className="text-left text-xl font-medium">Views</th> */}
                         <th className="text-left text-xl font-medium">Holders</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((row) => (
-                        <tr key={row.id} className="hover:bg-[#3f3f3f] hover:text-white border-solid border-y-2 border-grey-100">
+                        <tr key={row.tokenId} className="hover:bg-[#3f3f3f] hover:text-white border-solid border-y-2 border-grey-100">
                             <td>
                                 <img
                                     alt=""
@@ -46,7 +46,7 @@ export const MerchDashboardTile = () => {
                             </td>
                             <td>{row.desc}</td>
                             <td>{row.tokenId}</td>
-                            <td>{row.views.length}</td>
+                            {/* <td>{row.views.length}</td> */}
                             <td>{row.holders.length}</td>
                         </tr>
                     ))}

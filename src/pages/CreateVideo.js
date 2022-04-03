@@ -209,7 +209,7 @@ const CreateVideo = () => {
 
                 </div>
                 <div className="flex justify-between items-center">
-                    <button className="bg-[#B11414] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl">
+                    <button className="bg-[#B11414] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl" onClick={() => navigate("/")}>
                         Cancel
                     </button>
                     {

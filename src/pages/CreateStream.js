@@ -216,7 +216,8 @@ const CreateStream = () => {
             playbackId: response.playbackId,
             thumbNail: "",
             title: "",
-            desc: ""
+            desc: "",
+            rewards: []
         });
         setPlaybackId(response.playbackId)
         setStreamKey(response.streamKey)
@@ -313,7 +314,7 @@ const CreateStream = () => {
 
                 </div>
                 <div className='flex justify-between bg-[#3f3f3f] text-white rounded-2xl p-4 max-h-[400px] w-full'>
-                    <div>{activeViewers.length}</div>
+                    <div>{activeViewers ? activeViewers.length : 0}</div>
                     <ChatBox id={account} />
                 </div>
                 <div className="flex justify-between items-center">

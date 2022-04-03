@@ -17,7 +17,7 @@ export const RewardTiles = (props) => {
             });
         setTitle(res.name);
         setDesc(res.description);
-        setThumbnail(res.animation_url);
+        setThumbnail(res.image);
     }
     return (
         // <Link to={`/video/${props.nft.tokenId}`}>
