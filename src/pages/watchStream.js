@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { MaticBlack, MaticWhite } from '../components/svg';
+import ChatBox from '../components/ChatBox';
+
 import videojs from "video.js";
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { db } from '../firebase';
@@ -240,7 +242,7 @@ const WatchStream = () => {
                         playsInline
                     />
                 </div>
-                <div className="flex  justify-between min-h-[300px]">
+                <div className="flex justify-between min-h-[300px]">
                     <div>
                         <h1 className="text-3xl font-medium my-12 mx-16">{title}</h1>
                         <p className="text-[#b5b5b5] w-[40vw] min-h[150px] mx-16">{desc}</p>
@@ -254,15 +256,8 @@ const WatchStream = () => {
 
                     </div>
                 </div>
-                <div className="grid grid-cols-7 gap-4 bg-[#3f3f3f] text-white rounded-2xl p-4">
-                    {/* TODO loop through and pass viewers details dynamically */}
-                    <div className='w-14 h-14 bg-white rounded-full'>
-                        <img
-                            alt=""
-                            src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png"
-                            className="object-contain w-14 h-14"
-                        />
-                    </div>
+                <div className='flex justify-between bg-[#3f3f3f] text-white rounded-2xl p-4 max-h-[400px] overflow-y-auto w-1/2'>
+                    <ChatBox />
                 </div>
                 <div className="flex justify-between items-center">
                     <button className="bg-[#B11414] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl" onClick={() => leaveStream()}>

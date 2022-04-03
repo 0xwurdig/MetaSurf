@@ -9,7 +9,7 @@ import CreateStream from './pages/CreateStream';
 import CreateVideo from './pages/CreateVideo';
 import DashBoard from './pages/DashBoard';
 import Home from './pages/Home';
-import WatchStream from './pages/WatchStream';
+import WatchStream from './pages/watchStream';
 import WatchVideo from './pages/WatchVideo';
 
 const App = () => {
