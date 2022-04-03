@@ -1,16 +1,42 @@
-export const VideoTiles = () => {
+import React, { useState, useEffect } from "react"
+import { db } from "../firebase"
+import { Link } from 'react-router-dom';
+import { getDocs, query, collection, where, doc, onSnapshot } from "firebase/firestore";
+
+
+export const VideoTiles = (props) => {
+    const NFT_Port_API = "05c9c773-8027-45ad-99b1-5888d2e83412"
+    const [title, setTitle] = useState("------ ------")
+    const [owner, setOwner] = useState("--------------------------------------")
+    const [thumbnail, setThumbnail] = useState("/newYork.jpg")
+    useEffect(() => {
+        getData()
+    }, [])
+    const getData = async () => {
+        const res = await fetch("https://ipfs.io/ipfs/" + props.nft.metadataUri.split("//")[1])
+            .then(response => response.json())
+            .catch(err => {
+                console.error(err);
+            });
+        setTitle(res.name);
+        setOwner(res.owner);
+        setThumbnail(res.image);
+    }
     return (
-        <div className="mr-10 w-[22vw]">
-            <img alt="" src="/newYork.jpg" />
-            <div className="flex justify-between items-center mt-2">
-                <div className="w-[70%] h-auto">
-                    <p className="text-lg text-ellipsis overflow-hidden">My new travel in</p>
-                    <p className="text-[#b5b5b5] text-xs text-ellipsis overflow-hidden">0x8BC09eEE30b7f6E620C7f3a89bc131B381cA0523</p>
-                </div>
-                <div className="w-auto h-12 bg-[#b5b5b5] overflow-clip rounded-full">
-                    <img alt="" src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png" className="h-full object-contain" />
+        <Link to={`/video/${props.nft.tokenId}`}>
+            <div className="mr-10 w-[22vw]">
+                <img alt="" src={thumbnail} className="w-full aspect-video" />
+                <div className="flex justify-between items-center mt-2">
+                    <div className="w-[70%] h-auto">
+                        <p className="text-lg text-ellipsis overflow-hidden">{title}</p>
+                        <p className="text-[#b5b5b5] text-xs text-ellipsis overflow-hidden">{owner}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-[#b5b5b5] overflow-clip rounded-full">
+                        <img alt="" src="https://www.larvalabs.com/public/images/cryptopunks/punk1385.png" className="object-contain w-full" />
+                    </div>
                 </div>
             </div>
-        </div>
+
+        </Link>
     )
 }

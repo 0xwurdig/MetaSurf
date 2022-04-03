@@ -1,15 +1,15 @@
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { db } from '../firebase';
 import { InjectedConnector } from "@web3-react/injected-connector";
 const Injected = new InjectedConnector({
-    supportedChainIds: [137]
+    supportedChainIds: [80001]
 });
 const NavBar = () => {
     const { activate } = useWeb3React();
     const { active, account } = useWeb3React();
     return (
         <div>
-
             <div className="flex h-12 bg-white justify-between items-center px-5">
                 <div className="menu flex">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
