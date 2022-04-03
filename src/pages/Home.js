@@ -5,6 +5,7 @@ import { VideoTiles } from '../components/video';
 import { useWeb3React } from '@web3-react/core';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../firebase';
+import { SideNavBar } from '../components/sideNav';
 
 
 
@@ -58,14 +59,7 @@ const Home = () => {
     });
     return (
         <div className="flex">
-            <div className="bg-[#3f3f3f] min-h-[100vh] h-auto w-[20vw] py-10 px-20 text-lg text-[#b5b5b5]">
-                <ul>
-                    <li className="my-4"><Link to="/">Home</Link></li>
-                    <li className="my-4"><Link to="/dashboard">Dashboard</Link></li>
-                    <li className="my-4"><Link to="/createStream">Stream</Link></li>
-                    <li className="my-4"><Link to="/createVideo">Videos</Link></li>
-                </ul>
-            </div>
+            <SideNavBar />
             {
                 account
                     ? <div className="p-[5vw]">

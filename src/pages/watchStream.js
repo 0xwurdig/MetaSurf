@@ -13,6 +13,7 @@ import Web3 from "web3";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { Biconomy } from '@biconomy/mexa';
 import { ethers } from "ethers";
+import { SideNavBar } from '../components/sideNav';
 // import {
 //     BatchOperation
 // } from "@superfluid-finance/ethereum-contracts/interfaces/superfluid/ISuperfluid.sol";
@@ -35,21 +36,26 @@ const WatchStream = () => {
     }, []);
     useEffect(() => {
         getData()
+        return async () => {
+            const docRef = doc(db, "users", id);
+            await updateDoc(docRef, {
+                viewers: arrayRemove(account)
+            });
+        }
     }, [])
 
     const getData = async () => {
         const docRef = doc(db, "users", id);
-        const docSnap = await getDoc(docRef);
-        // console.log("Document data:", docSnap.data().playbackId);
-        setPlaybackId(docSnap.data().playbackId)
-        setTitle(docSnap.data().title)
-        setDesc(docSnap.data().desc)
         await updateDoc(docRef, {
             viewers: arrayUnion(account)
         });
         onSnapshot(doc(db, "users", id), (doc) => {
+            setPlaybackId(doc.data().playbackId)
+            setTitle(doc.data().title)
+            setDesc(doc.data().desc)
             setActiveViewers(doc.data().viewers)
         });
+        console.log(playbackId)
     }
     useEffect(() => {
         if (videoEl == null) return;
@@ -71,17 +77,17 @@ const WatchStream = () => {
         player.on("error", () => {
             player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
         });
-
+        console.log(playbackId);
     }, [playbackId]);
     useEffect(() => {
         if (!window.ethereum) {
             console.log("Metamask is required to use this DApp");
             return;
         }
-        startFlow("0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa", 333333333333333)
-        return () => { deleteFLow("0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa") }
+        startFlow(flowRate)
+        return () => { deleteFLow() }
     }, []);
-    async function startFlow(recipient, flowRate) {
+    async function startFlow(flowRate) {
         const chainId = await window.ethereum.request({ method: "eth_chainId" });
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const sf = await Framework.create({
@@ -96,13 +102,13 @@ const WatchStream = () => {
                 MATICXX.createFlow({
                     sender: account,
                     receiver: "0x3A920fBe9A3C4Bd3a95ad9BA146dFbcE8fF0154C",
-                    flowRate: flowRate,
+                    flowRate: flowRate * 0.98,
                     superToken: MATICx
                     // userData?: string
                 }), MATICXX.createFlow({
                     sender: account,
-                    receiver: "0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa",
-                    flowRate: flowRate,
+                    receiver: id,
+                    flowRate: flowRate * 0.02,
                     superToken: MATICx
                     // userData?: string
                 })]
@@ -111,12 +117,11 @@ const WatchStream = () => {
                     `Congrats - you've just successfully executed a batch call!
                   You have completed 2 operations in a single tx 🤯
                   View the tx here:  https://kovan.etherscan.io/tx/${tx.hash}
-                  View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+                  View Your Stream At: https://app.superfluid.finance/dashboard/${id}
                   Network: Kovan
                   Super Token: DAIx
                   Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
-                  Receiver: ${recipient},
-                  FlowRate: ${Web3.eth.getBalance(MATICx)}
+                  Receiver: ${id},
                 }
                   `
                 );
@@ -142,6 +147,7 @@ const WatchStream = () => {
             // FlowRate: ${flowRate}
             // `
             // );
+            setStreamOn(true);
         } catch (error) {
             console.log(
                 "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
@@ -168,7 +174,7 @@ const WatchStream = () => {
                     // userData?: string
                 }), MATICXX.deleteFlow({
                     sender: account,
-                    receiver: "0x983fF188c42aC6890a56fBEDb4A5f9b087F17faa",
+                    receiver: id,
                     superToken: MATICx
                     // userData?: string
                 })]
@@ -220,18 +226,11 @@ const WatchStream = () => {
         // await updateDoc(docRef, {
         //     viewers: arrayRemove(account)
         // }).then(() => navigate('/'));
-        deleteFLow(account)
+        deleteFLow(account).then(() => navigate('/'))
     }
     return (
         <div className="flex ">
-            <div className="bg-[#3f3f3f] h-auto min-h-[100vh] w-auto py-10 px-20 text-lg text-[#b5b5b5]">
-                <ul>
-                    <li className="my-4"><div onClick={() => navigate('/')}>Home</div></li>
-                    <li className="my-4"><div onClick={() => navigate('/dashboard')}>Dashboard</div></li>
-                    <li className="my-4"><div onClick={() => navigate('/createStream')}>Stream</div></li>
-                    <li className="my-4">Video NFT</li>
-                </ul>
-            </div>
+            <SideNavBar />
             <div className="p-[5vw]">
                 <div className="w-[70vw]  min-w-[1100px] max-h-[1000px] overflow-clip">
                     <video
@@ -256,8 +255,8 @@ const WatchStream = () => {
 
                     </div>
                 </div>
-                <div className='flex justify-between bg-[#3f3f3f] text-white rounded-2xl p-4 max-h-[400px] overflow-y-auto w-1/2'>
-                    <ChatBox />
+                <div className='flex justify-between bg-[#3f3f3f] text-white rounded-2xl p-4 max-h-[400px] w-full'>
+                    <ChatBox id={id} />
                 </div>
                 <div className="flex justify-between items-center">
                     <button className="bg-[#B11414] h-[50px] w-[25%] rounded-2xl my-8 text-white tracking-widest text-xl" onClick={() => leaveStream()}>

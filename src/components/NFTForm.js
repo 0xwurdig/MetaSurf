@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { setDoc, doc } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
+import { useWeb3React } from '@web3-react/core';
+import { setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 import { Biconomy } from '@biconomy/mexa';
 import Web3 from "web3";
@@ -10,6 +12,8 @@ import TextField from './TextField';
 const ipfs = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
 const NFTForm = () => {
+  const { account } = useWeb3React();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,10 +24,10 @@ const NFTForm = () => {
   const [nftUrl, setNftUrl] = useState("https://www.logistec.com/wp-content/uploads/2017/12/placeholder.png");
   const NFT_Port_API = "05c9c773-8027-45ad-99b1-5888d2e83412"
   const biconomy = new Biconomy(window.ethereum, {
-    apiKey: "P6g4LGJOy.30ed56bf-2bcb-4eb3-b616-a88f787aa2e8",
+    apiKey: "SdY8w1F5T.bb9f1dd2-4dda-42b2-9e8f-c9d6bb4a14eb",
     debug: true,
   });
-  const address = "0x48fd9124F7890E92d3097163860B9aEAc5D9928d"
+  const address = "0xa2eC6F13e3d09DE8e82713AF912f8fF8011A2599"
 
   const web3 = new Web3(biconomy);
   const contract = new web3.eth.Contract(
@@ -100,7 +104,7 @@ const NFTForm = () => {
         "Content-Type": "application/json",
         "Authorization": NFT_Port_API
       },
-      "body": JSON.stringify({ name: name, description: description, file_url: videoUrl, animation_url: videoUrl })
+      "body": JSON.stringify({ name: name, description: description, file_url: nftUrl, animation_url: videoUrl })
     })
       .then(response => response.json())
       .catch(err => {
@@ -118,11 +122,15 @@ const NFTForm = () => {
         "title": name,
         "video": videoUrl,
         "thumbnail": nftUrl,
+        "owner": account,
         "holders": [],
         "views": [],
-      }).then(() =>
-      // navigate("/home")
-      { console.log("DONEEEEEE") }
+      }).then(async () =>
+        await updateDoc(doc(db, "merch", "merch"), {
+          merch: arrayUnion(account)
+        }).then(async () => console.log("DONEEEEE"))
+        // navigate("/home")
+
       )
     })
     await contract.methods.createVideoNFT(metadataUri).send({

@@ -9,6 +9,7 @@ import { Biconomy } from '@biconomy/mexa';
 import Web3 from "web3";
 import { ethers } from "ethers";
 import { create as ipfsHttpClient } from 'ipfs-http-client'
+import { SideNavBar } from '../components/sideNav';
 const ipfs = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 const NFT_Port_API = "05c9c773-8027-45ad-99b1-5888d2e83412"
 
@@ -22,10 +23,10 @@ const CreateVideo = () => {
     const [loading, setLoading] = useState(false)
     const [uploaded, setUploaded] = useState(false)
     const biconomy = new Biconomy(window.ethereum, {
-        apiKey: "P6g4LGJOy.30ed56bf-2bcb-4eb3-b616-a88f787aa2e8",
+        apiKey: "SdY8w1F5T.bb9f1dd2-4dda-42b2-9e8f-c9d6bb4a14eb",
         debug: true,
     });
-    const address = "0x48fd9124F7890E92d3097163860B9aEAc5D9928d"
+    const address = "0xa2eC6F13e3d09DE8e82713AF912f8fF8011A2599"
 
     const web3 = new Web3(biconomy);
     const contract = new web3.eth.Contract(
@@ -131,6 +132,7 @@ const CreateVideo = () => {
                 "video": videoUrl,
                 "thumbnail": thumbNail,
                 "tips": 0,
+                "owner": account,
                 "views": [],
             }).then(() =>
                 navigate("/home")
@@ -161,14 +163,7 @@ const CreateVideo = () => {
     }
     return (
         <div className="flex ">
-            <div className="bg-[#3f3f3f] h-auto min-h-[100vh] w-auto py-10 px-20 text-lg text-[#b5b5b5]">
-                <ul>
-                    <li className="my-4"><Link to="/">Home</Link></li>
-                    <li className="my-4"><Link to="/dashboard">Dashboard</Link></li>
-                    <li className="my-4"><Link to="/createStream">Stream</Link></li>
-                    <li className="my-4">Video NFT</li>
-                </ul>
-            </div>
+            <SideNavBar />
             <div className="p-[5vw]">
                 <div className="w-[70vw] aspect-video min-w-[1100px] max-h-[1000px] overflow-clip"><div data-vjs-player>
 

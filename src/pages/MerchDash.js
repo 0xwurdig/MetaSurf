@@ -8,9 +8,10 @@ import Cards from '../components/Cards';
 
 import { MaticBlack } from '../components/svg';
 import { SideNavBar } from '../components/sideNav';
+import { MerchDashboardTile } from '../components/merchDash';
 
 
-const DashBoard = () => {
+const MerchDash = () => {
     return (
         <div className="flex">
             <SideNavBar />
@@ -33,7 +34,7 @@ const DashBoard = () => {
                     </div>
                 </div>
                 <div>
-                    <DashboardTile />
+                    <MerchDashboardTile />
                 </div>
             </div>
         </div>
@@ -69,4 +70,4 @@ const options = {
     }
 };
 
-export default DashBoard;
+export default MerchDash;

@@ -9,6 +9,8 @@ import CreateStream from './pages/CreateStream';
 import CreateVideo from './pages/CreateVideo';
 import DashBoard from './pages/DashBoard';
 import Home from './pages/Home';
+import MerchDash from './pages/MerchDash';
+import Rewards from './pages/Rewards';
 import WatchStream from './pages/watchStream';
 import WatchVideo from './pages/WatchVideo';
 
@@ -24,6 +26,8 @@ const App = () => {
         <Route exact path="createStream" element={<CreateStream />} />
         <Route exact path="createVideo" element={<CreateVideo />} />
         <Route exact path="createNft" element={<CreateNFT />} />
+        <Route exact path="merchDashboard" element={<MerchDash />} />
+        <Route exact path="rewards" element={<Rewards />} />
         <Route path="stream/:id" element={<WatchStream />} />
         <Route path="video/:id" element={<WatchVideo />} />
       </Routes>
