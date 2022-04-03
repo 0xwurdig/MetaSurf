@@ -7,6 +7,10 @@ import { MaticBlack } from '../components/svg';
 import videojs from "video.js";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ethers } from "ethers";
+import Web3 from "web3";
+import abi from '../abi/yourContract.json';
+import { Biconomy } from '@biconomy/mexa';
 // import yourContract from "../abi/yourContract.json"
 // import "videojs-contrib-hls";
 // import "videojs-contrib-quality-levels";
@@ -25,6 +29,36 @@ const CreateStream = () => {
     const [thumbNail, setThumbNail] = useState("");
     const [title, setTitle] = useState("Title...")
     const [desc, setDesc] = useState("Description...")
+    const [airDrop, setAirDrop] = useState("")
+    const biconomy = new Biconomy(window.ethereum, {
+        apiKey: "P6g4LGJOy.30ed56bf-2bcb-4eb3-b616-a88f787aa2e8",
+        debug: true,
+    });
+    const address = "0x48fd9124F7890E92d3097163860B9aEAc5D9928d"
+    const web3 = new Web3(biconomy);
+    const contract = new web3.eth.Contract(
+        abi,
+        address
+    );
+    const connectedContract = new ethers.Contract(address, abi, new ethers.providers.Web3Provider(window.ethereum).getSigner());
+    useEffect(() => {
+        if (!window.ethereum) {
+            console.log("Metamask is required to use this DApp");
+            return;
+        }
+        biconomy
+            .onEvent(biconomy.READY, async () => {
+                // Initialize your dapp here like getting user accounts etc
+                await window.ethereum.enable();
+                // console.log(`MUMBAI SMART CONTRACT`);
+                // console.log(contract);
+                // startApp();
+            })
+            .onEvent(biconomy.ERROR, (error, message) => {
+                // Handle error while initializing mexa
+                console.log(error);
+            });
+    }, []);
     const onVideo = useCallback((el) => {
         setVideoEl(el);
     }, []);
@@ -197,6 +231,9 @@ const CreateStream = () => {
             "desc": desc,
             "thumbNail": thumbNail,
         });
+    }
+    const airDropped = async (address) => {
+        const res = await connectedContract.airDrop(address, { value: ethers.utils.parseEther(airDrop), from: account })
     }
     return (
         <div className="flex ">

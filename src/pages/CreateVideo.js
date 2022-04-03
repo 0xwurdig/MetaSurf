@@ -18,7 +18,6 @@ const CreateVideo = () => {
     const [thumbNail, setThumbNail] = useState("");
     const [videoUrl, setVideoUrl] = useState("");
     const [title, setTitle] = useState("Title...")
-    const [tokenId, setTokenId] = useState(null)
     const [desc, setDesc] = useState("Description...")
     const [loading, setLoading] = useState(false)
     const [uploaded, setUploaded] = useState(false)
