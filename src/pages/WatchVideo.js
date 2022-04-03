@@ -15,6 +15,7 @@ const WatchVideo = () => {
     const navigate = useNavigate()
     const id = params.id
     const [videoUrl, setVideoUrl] = useState("")
+    const [thumbnail, setThumbnail] = useState("")
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [owner, setOwner] = useState("")
@@ -52,6 +53,7 @@ const WatchVideo = () => {
     useEffect(() => {
         onSnapshot(doc(db, "videos", id), (doc) => {
             setVideoUrl(doc.data().video)
+            setThumbnail(doc.data().thumbnail)
             setTitle(doc.data().title)
             setDesc(doc.data().desc)
             setOwner(doc.data().owner)
@@ -102,6 +104,7 @@ const WatchVideo = () => {
                         className="h-full w-full video-js vjs-theme-city"
                         controls
                         playsInline
+                        poster={thumbnail}
                     />
                 </div>
                 <div className="flex  justify-between min-h-[300px]">

@@ -2,22 +2,23 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { db, storage } from '../firebase';
 import { useWeb3React } from '@web3-react/core'
 import { Link, useNavigate } from 'react-router-dom';
-import { addDoc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { create as ipfsHttpClient } from 'ipfs-http-client'
 import abi from '../abi/yourContract.json'
 import { Biconomy } from '@biconomy/mexa';
 import Web3 from "web3";
+import { ethers } from "ethers";
+import { create as ipfsHttpClient } from 'ipfs-http-client'
 const ipfs = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 const NFT_Port_API = "05c9c773-8027-45ad-99b1-5888d2e83412"
 
 const CreateVideo = () => {
     const { account } = useWeb3React();
     const navigate = useNavigate();
-
     const [thumbNail, setThumbNail] = useState("");
     const [videoUrl, setVideoUrl] = useState("");
     const [title, setTitle] = useState("Title...")
+    const [tokenId, setTokenId] = useState(null)
     const [desc, setDesc] = useState("Description...")
     const [loading, setLoading] = useState(false)
     const [uploaded, setUploaded] = useState(false)
@@ -25,13 +26,16 @@ const CreateVideo = () => {
         apiKey: "P6g4LGJOy.30ed56bf-2bcb-4eb3-b616-a88f787aa2e8",
         debug: true,
     });
-    const address = "0xfB59d267570D4Ea182662534d7F7ED431F870a68"
+    const address = "0x48fd9124F7890E92d3097163860B9aEAc5D9928d"
 
     const web3 = new Web3(biconomy);
     const contract = new web3.eth.Contract(
         abi,
         address
     );
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const ethersContract = new ethers.Contract(address, abi, provider);
+
     useEffect(() => {
         if (!window.ethereum) {
             console.log("Metamask is required to use this DApp");
@@ -41,7 +45,7 @@ const CreateVideo = () => {
             .onEvent(biconomy.READY, async () => {
                 // Initialize your dapp here like getting user accounts etc
                 await window.ethereum.enable();
-                // console.log(`MUMBAI SMART CONTRACT`);
+                console.log(`MUMBAI SMART CONTRACT`);
                 // console.log(contract);
                 // startApp();
             })
@@ -109,26 +113,45 @@ const CreateVideo = () => {
                 "Content-Type": "application/json",
                 "Authorization": NFT_Port_API
             },
-            "body": "{\"name\":\"My Art\",\"description\":\"This is my custom art piece\",\"file_url\":\"https://ipfs.io/ipfs/QmRModSr9gQTSZrbfbLis6mw21HycZyqMA3j8YMRD11nAQ\"}"
+            "body": JSON.stringify({ name: title, description: desc, file_url: thumbNail, animation_url: videoUrl, custom_fields: { owner: account } })
         })
             .then(response => response.json())
             .catch(err => {
                 console.error(err);
             });
         const metadataUri = res.metadata_uri
-        let tx = await contract.methods.createVideoNFT(metadataUri).send({
+        ethersContract.once("NewVideo", async (a, b, c) => {
+            // setTokenId(a.toNumber())
+            // console.log(b)
+            // console.log(c)
+            await setDoc(doc(db, "videos", a.toNumber().toString()), {
+                "tokenId": a.toNumber(),
+                "metadataUri": c,
+                "desc": desc,
+                "title": title,
+                "video": videoUrl,
+                "thumbnail": thumbNail,
+                "tips": 0,
+                "views": [],
+            }).then(() =>
+                navigate("/home")
+            )
+        })
+        await contract.methods.createVideoNFT(metadataUri).send({
             from: window.ethereum.selectedAddress,
             signatureType: biconomy.EIP712_SIGN,
             //optionally you can add other options like gasLimit
-        }).then(tokenId => { console.log(tokenId) });
-        tx.on("transactionHash", function (hash) {
-            console.log(`Transaction hash is ${hash}`);
-            console.log(`Transaction sent. Waiting for confirmation ..`);
-        }).once("confirmation", function (confirmationNumber, receipt) {
-            console.log(receipt);
-            console.log(receipt.transactionHash);
-            //do something with transaction hash
-        });
+        })
+        console.log("DONE")
+        // console.log(tokenId)
+        // tx.on("transactionHash", function (hash) {
+        //     console.log(`Transaction hash is ${hash}`);
+        //     console.log(`Transaction sent. Waiting for confirmation ..`);
+        // }).once("confirmation", function (confirmationNumber, receipt) {
+        //     console.log(receipt);
+        //     console.log(receipt.transactionHash);
+        //     //do something with transaction hash
+        // });
         // await addDoc(collection(db, "videos"), {
         //     // "tokenId":
         //     "metadataUri":metadataUri,
@@ -148,7 +171,7 @@ const CreateVideo = () => {
                 </ul>
             </div>
             <div className="p-[5vw]">
-                <div className="w-[70vw]  min-w-[1100px] max-h-[1000px] overflow-clip"><div data-vjs-player>
+                <div className="w-[70vw] aspect-video min-w-[1100px] max-h-[1000px] overflow-clip"><div data-vjs-player>
 
 
                     <video
