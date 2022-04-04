@@ -29,8 +29,8 @@ export const MerchDashboardTile = () => {
                     <tr>
                         <th className="text-left text-xl font-medium">Thumbnail</th>
                         <th className="text-left text-xl font-medium">Title</th>
-                        <th className="text-left text-xl font-medium">ID</th>
-                        {/* <th className="text-left text-xl font-medium">Views</th> */}
+                        <th className="text-left text-xl font-medium">Desc</th>
+                        <th className="text-left text-xl font-medium">Id</th>
                         <th className="text-left text-xl font-medium">Holders</th>
                     </tr>
                 </thead>
@@ -44,9 +44,9 @@ export const MerchDashboardTile = () => {
                                     className='rounded-1xl w-1/4 h-6 mb-2 place-content-center'
                                 />
                             </td>
+                            <td>{row.title}</td>
                             <td>{row.desc}</td>
                             <td>{row.tokenId}</td>
-                            {/* <td>{row.views.length}</td> */}
                             <td>{row.holders.length}</td>
                         </tr>
                     ))}

@@ -26,7 +26,7 @@ const CreateVideo = () => {
         apiKey: "SdY8w1F5T.bb9f1dd2-4dda-42b2-9e8f-c9d6bb4a14eb",
         debug: true,
     });
-    const address = "0xa2eC6F13e3d09DE8e82713AF912f8fF8011A2599"
+    const address = "0x4a3697426a2bd130CE2bB755DdF883FE8BDfBFE4"
 
     const web3 = new Web3(biconomy);
     const contract = new web3.eth.Contract(

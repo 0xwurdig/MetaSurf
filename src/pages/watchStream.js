@@ -85,7 +85,7 @@ const WatchStream = () => {
             return;
         }
         startFlow(flowRate)
-        return () => { deleteFLow() }
+        // return () => { deleteFLow() }
     }, []);
     async function startFlow(flowRate) {
         const chainId = await window.ethereum.request({ method: "eth_chainId" });
@@ -226,6 +226,7 @@ const WatchStream = () => {
         // await updateDoc(docRef, {
         //     viewers: arrayRemove(account)
         // }).then(() => navigate('/'));
+        console.log("Delete Flow")
         deleteFLow(account).then(() => navigate('/'))
     }
     return (
@@ -235,7 +236,7 @@ const WatchStream = () => {
                 <div className="w-[70vw]  min-w-[1100px] max-h-[1000px] overflow-clip">
                     <video
                         id="video"
-                        ref={streamOn ? onVideo : {}}
+                        ref={streamOn ? onVideo : null}
                         className="h-full w-full video-js vjs-theme-city"
                         controls
                         playsInline

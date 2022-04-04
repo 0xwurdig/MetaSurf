@@ -208,13 +208,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_tokenId",
-                "type": "uint256"
-            }
-        ],
+        "inputs": [],
         "name": "withdraw",
         "outputs": [],
         "stateMutability": "nonpayable",
