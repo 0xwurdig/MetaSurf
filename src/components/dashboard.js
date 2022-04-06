@@ -27,7 +27,7 @@ export const DashboardTile = () => {
       <table className="table-auto w-full">
         <thead>
           <tr>
-            <th className="text-left text-xl font-medium">Thumbnail</th>
+            <th className="text-left text-xl font-medium">Video</th>
             <th className="text-left text-xl font-medium">Title</th>
             <th className="text-left text-xl font-medium">ID</th>
             <th className="text-left text-xl font-medium">Views</th>
@@ -44,7 +44,7 @@ export const DashboardTile = () => {
                   className='rounded-1xl w-1/4 h-6 mb-2 place-content-center'
                 />
               </td>
-              <td>{row.desc}</td>
+              <td>{row.title}</td>
               <td>{row.tokenId}</td>
               <td>{row.views.length}</td>
               <td>{row.tips}</td>
